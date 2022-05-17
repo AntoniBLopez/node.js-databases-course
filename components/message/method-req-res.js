@@ -6,17 +6,13 @@ const controller = require('./controller')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    console.log(req.headers)
-
-    res.header({
-        "text": "Hola"
-    })
-
-    if (req.query.error == 'true') {
-        response.error(req, res, 'Ha habido un error', 400, 'Detalles desde server.js')
-    } else {
-        response.success(req, res, 'Obtenido correctamente', 202)
-    }
+    controller.getMessages()
+        .then((messageList) => {
+            response.success(req, res, messageList, 200)
+        })
+        .catch(err => {
+            response.error(req, res, 'Unexpected Error', 500, err)
+        })
 })
 
 router.post('/', (req, res) => {
