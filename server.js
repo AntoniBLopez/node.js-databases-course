@@ -1,7 +1,8 @@
-import express, { Router } from 'express';
-import bodyParser from 'body-parser'
+const express = require('express');
+const bodyParser = require('body-parser');
+const response = require('./network/response')
 
-const router = Router()
+const router = express.Router()
 var app = express()
 
 app.use(bodyParser.json())
@@ -12,12 +13,19 @@ router.get('/message', (req, res) => {
     res.header({
         "text": "Hola"
     })
-    res.send(`Hola desde GET!!!! con router. Mensaje obtenido`)
+
+    if (req.query.error == 'true') {
+        response.error(req, res, 'Ha habido un error', 400)
+    } else {
+        response.success(req, res, 'Obtenido correctamente', 202)
+    }
 })
 
 router.post('/message', (req, res) => {
     res.send('Hola desde POST!!!! con router. Producto añadido')
 })
+
+app.use('/app', express.static('public'))
 
 // app.use('/home', (req, res) => {
 //     res.send('Hola')
