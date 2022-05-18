@@ -34,10 +34,14 @@ async function updateMessage(id, updatedMessage) {
     return newMessage
 }
 
+function deleteMessage(id) {
+    return Model.deleteOne({_id: id})
+}
+
 module.exports = {
     addMessageToDB,
     getListMessages,
-    updateMessage
     //getspecific
-    //delete
+    updateMessage,
+    deleteMessage
 }

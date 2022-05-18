@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    controller.addMessages(req.body.user, req.body.message)
+    controller.addMessage(req.body.user, req.body.message)
         .then(resolve => {
             response.success(req, res, resolve, 202)
         })
@@ -28,12 +28,22 @@ router.post('/', (req, res) => {
 })
 
 router.patch('/:id', (req, res) => {
-    controller.updateMessages(req.params.id, req.body.updatedMessage)
+    controller.updateMessage(req.params.id, req.body.updatedMessage)
         .then(data => {
             response.success(req, res, data, 202)
         })
         .catch(err => {
             response.error(req, res, 'Error interno', 304, err)
+        })
+})
+
+router.delete('/:id', (req, res) => {
+    controller.deleteMessage(req.params.id)
+        .then(() => {
+            response.success(req, res, `User ${req.params.id} removed successfully`, 200)
+        })
+        .catch(err => {
+            response.error(req, res, 'Internal error', 500, err)
         })
 })
 
