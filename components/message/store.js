@@ -16,9 +16,14 @@ function addMessageToDB(userMessageData) {
     userMessage.save()
 }
 
-async function getListMessages() {
-    const listOfMessagesToDB = await Model.find()
-    return listOfMessagesToDB
+async function getListMessages(specificUserId) {
+    if (specificUserId !== null) {
+        const specificUserMessage = await Model.find({_id: specificUserId})
+        return specificUserMessage
+    } else {
+        const listOfMessagesToDB = await Model.find()
+        return listOfMessagesToDB
+    }
 }
 
 async function updateMessage(id, updatedMessage) {

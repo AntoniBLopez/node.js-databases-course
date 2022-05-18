@@ -6,7 +6,9 @@ const controller = require('./controller')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    controller.getMessages()
+    const specificUserId = req.query.userId || null
+
+    controller.getMessages(specificUserId)
         .then(messageList => {
             response.success(req, res, messageList, 200)
         })

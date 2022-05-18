@@ -16,9 +16,9 @@ function addMessages (user, message) {
     })
 }
 
-function getMessages () {
+function getMessages (specificUserId) {
     return new Promise((resolve, reject) => {
-        resolve(store.getListMessages())
+        resolve(store.getListMessages(specificUserId))
     })
 }
 
