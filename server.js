@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const connect = require('./db-connections')
 const router = require('./server/routes')
+
+connect()
 
 const app = express()
 app.use(bodyParser.json())
