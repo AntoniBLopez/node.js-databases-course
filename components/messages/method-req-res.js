@@ -1,14 +1,19 @@
 const express = require('express');
+const multer = require('multer');
 
 const response = require('../../server/query-success-or-error');
 const controller = require('./controller')
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    const specificUserId = req.query.userId || null
+const upload = multer({
+    dest: 'public/files/'
+})
 
-    controller.getMessages(specificUserId)
+router.get('/', (req, res) => {
+    const filterMessages = req.query.chat || null
+
+    controller.getMessages(filterMessages)
         .then(messageList => {
             response.success(req, res, messageList, 200)
         })
@@ -17,10 +22,10 @@ router.get('/', (req, res) => {
         })
 })
 
-router.post('/', (req, res) => {
-    controller.addMessage(req.body.user, req.body.message)
-        .then(resolve => {
-            response.success(req, res, resolve, 202)
+router.post('/', upload.single('file'), (req, res) => {
+    controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
+        .then(fullMessage => {
+            response.success(req, res, fullMessage, 202)
         })
         .catch(err => {
             response.error(req, res, 'Información invalida', 402, `Error en el controller: Error:${err}`)

@@ -1,24 +1,32 @@
 const store = require('./store')
 
-function addMessage (user, message) {
+function addMessage (chat, user, message, file) {
     return new Promise((resolve, reject) => {
-        if (!user || !message) {
+        if (!chat || !user || !message || !file) {
             console.error('[message controller] Estoy en Reject, no hay usuario o mensaje')
             reject('Los datos son incorrectos. Notificación desde el archivo controller desde una Promise')
         }
-        const dataUser = {
+
+        let fileUrl = ''
+        if (file) {
+            fileUrl = `http://localhost:3000/app/files/${file.filename}`
+        }
+
+        const fullMessage = {
+            chat,
             user,
             message,
-            date: new Date()
+            date: new Date(),
+            file: fileUrl
         }
-        store.addMessageToDB(dataUser)
-        resolve(dataUser)
+        store.addMessageToDB(fullMessage)
+        resolve(fullMessage)
     })
 }
 
-function getMessages (specificUserId) {
+function getMessages (specificChat) {
     return new Promise((resolve, reject) => {
-        resolve(store.getListMessages(specificUserId))
+        resolve(store.getListMessages(specificChat))
     })
 }
 

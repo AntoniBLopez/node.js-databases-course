@@ -5,14 +5,22 @@ function addMessageToDB(userMessageData) {
     userMessage.save()
 }
 
-async function getListMessages(specificUserId) {
-    if (specificUserId !== null) {
-        const specificUserMessage = await Model.find({_id: specificUserId})
-        return specificUserMessage
-    } else {
-        const listOfMessagesToDB = await Model.find()
-        return listOfMessagesToDB
-    }
+function getListMessages(specificChat) {
+    return new Promise((resolve, reject) => {
+        let filter = {}
+
+        if (specificChat !== null) {
+            filter = {chat: specificChat}
+        }
+        Model.find(filter)
+            .populate('user')
+            .exec((err, populated) => {
+                if(err) {
+                    reject(err)
+                }
+                resolve(populated)
+            })
+    })
 }
 
 async function updateMessage(id, updatedMessage) {
